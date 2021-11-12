@@ -112,18 +112,30 @@ def users():
 ###########PITCH CATEGORIES
 @app.route('/pitch-categories',methods=['POST','GET'])
 def pitch_categories():
-    category_name = request.form['category_name']
-    cat = PitchCategory(category_name=category_name)
-    db.session.add(cat)
-    db.session.commit()
-    return redirect(url_for('dashboard'))
+    if request.method == 'POST':
+        # categories = PitchCategory.query.
+        category_name = request.form['category_name']
+        cat = PitchCategory(category_name=category_name)
+        db.session.add(cat)
+        db.session.commit()
+        return redirect(url_for('dashboard'))
+    elif request.method == 'GET':
+        categories = PitchCategory.query.all()
+        lst = [{"id":cat.id,"name":cat.category_name,"created_date":cat.created_date} for cat in categories]
+        results = jsonify(lst)
+        return results
 
 ########DASHBOARD SECTION
 @app.route('/dashboard',methods=['GET','POST'])
 @app.route('/',methods=['GET','POST'])
 # @login_required
 def dashboard():
-    return render_template('dashboard.html')
+    return render_template('all_pitches.html')
+
+##Load categories page
+@app.route('/categories')
+def categories():
+    return render_template('categories.html')
 
 if __name__ == '__main__':
     db.create_all()

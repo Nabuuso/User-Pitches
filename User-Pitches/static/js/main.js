@@ -1,4 +1,6 @@
 $(document).ready(function(){
+    //GET PITCH CATEGORY
+    getSubCategory();
     //Register user
     $("#registerBtn").click(function(e){
         e.preventDefault();
@@ -20,6 +22,7 @@ $(document).ready(function(){
     });
     //SUBMIT CATEGORY
     $("#submitCategory").click(function(e){
+        getSubCategory()
         e.preventDefault();
         $.ajax({
             data:{
@@ -33,4 +36,28 @@ $(document).ready(function(){
             location.reload()
         });
     });
+    //GET SUBCATEGORY
+    function getSubCategory(){
+        $.ajax({
+            url:'pitch-categories',
+            method:'GET',
+            cache:false,
+            success:function(data){
+                for(let i=0; i < data.length;i++){
+                    let tbl = "<tr>";
+                    tbl += "<td>"+data[i].name+"</td>"
+                    tbl += "<td>"+data[i].created_date+"</td>"
+                    tbl += "</tr>"
+                    $("#table-category").append(tbl)
+                }
+               
+
+            }
+        })
+    }
+    //LOAD PITCH CATEGORIES
+    $("#category-link").click(function(e){
+        e.preventDefault();
+        $("#dashboard-container").load("categories")
+    })
 })

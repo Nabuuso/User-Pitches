@@ -1,0 +1,46 @@
+{% extends 'dashboard.html' %}
+{% block dashboard_content %}
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div class="category-title">
+                <h3>Pitches Categories</h3>
+                <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#categoriesModal">Add
+                    category</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped" id="table-category">
+                    <tr>
+                        <th>Category name</th>
+                        <th>Created date</th>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal" tabindex="-1" id="categoriesModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Pitch category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="category" class="form-label">Category name</label>
+                        <input type="text" class="form-control" id="category" placeholder="Category title">
+                    </div>
+                    <div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="submitCategory">Save category</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
