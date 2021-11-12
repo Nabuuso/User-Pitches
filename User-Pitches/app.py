@@ -1,14 +1,13 @@
 from flask import Flask,render_template,flash,request,jsonify
-from flask_wtf import FlaskForm
-from wtforms import StringField,SubmitField
-from wtforms.validators import DataRequired
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 from datetime import datetime
 
 app = Flask(__name__)
 app.config['SECRET_KEY']="Abcd1234!@#$%^&*()EFGH"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://nabuusu:P@$$w0rd@localhost/pitches'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://nabuusu:12345@localhost/pitches'
 db = SQLAlchemy(app)
+migrate = Migrate(app,db)
 
 class User(db.Model):
     id = db.Column(db.Integer,primary_key=True)
