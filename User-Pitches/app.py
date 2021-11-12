@@ -108,7 +108,15 @@ def users():
     user = User(full_name=full_name,email=email,password_hash=hashed_password)
     db.session.add(user)
     db.session.commit()
-    return jsonify({'name':full_name,'email':email})
+    return redirect(url_for('dashboard'))
+###########PITCH CATEGORIES
+@app.route('/pitch-categories',methods=['POST','GET'])
+def pitch_categories():
+    category_name = request.form['category_name']
+    cat = PitchCategory(category_name=category_name)
+    db.session.add(cat)
+    db.session.commit()
+    return redirect(url_for('dashboard'))
 
 ########DASHBOARD SECTION
 @app.route('/dashboard',methods=['GET','POST'])

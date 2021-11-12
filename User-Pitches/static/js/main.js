@@ -11,7 +11,26 @@ $(document).ready(function(){
             type:'POST',
             url:'users'
         }).done(function(data){
-            alert(data.name);
+            alert("Registration completed successfully!")
+            $('#fullName').val('')
+            $('#email').val(''),
+            $('#password').val('')
+            location.reload()
+        });
+    });
+    //SUBMIT CATEGORY
+    $("#submitCategory").click(function(e){
+        e.preventDefault();
+        $.ajax({
+            data:{
+                category_name : $('#category').val(),
+            },
+            type:'POST',
+            url:'pitch-categories'
+        }).done(function(data){
+            alert("Pitch created successfully");
+            $('#category').val('')
+            location.reload()
         });
     });
 })

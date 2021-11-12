@@ -46,7 +46,7 @@
 .side-bar-category{
     margin-top:1em;
     min-height:80vh;
-    background-color:#d3d3d3;
+    background-color:#FEF0DB;
 }
 @media only screen and (max-width:600px){
     .login-section{
