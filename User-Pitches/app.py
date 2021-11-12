@@ -29,6 +29,7 @@ class User(db.Model,UserMixin):
     email = db.Column(db.String(200),nullable=False,unique=True)
     password_hash = db.Column(db.String(200))
     created_date = db.Column(db.DateTime,default=datetime.utcnow)
+    pitches = db.relationship('Pitch',backref="pitch")
     # def __init__(self,full_name,email,password):
     #     self.full_name = full_name
     #     self.email = email
@@ -48,6 +49,7 @@ class PitchCategory(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     category_name = db.Column(db.String(200),nullable=False)
     created_date = db.Column(db.DateTime,default=datetime.utcnow)
+    pitches = db.relationship('Pitch',backref="pitch")
 class Pitch(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     title = db.Column(db.String(200),nullable=False)
@@ -55,6 +57,8 @@ class Pitch(db.Model):
     created_date = db.Column(db.DateTime,default=datetime.utcnow)
     upvote = db.Column(db.Integer)
     downvote = db.Column(db.Integer)
+    category_id = db.Column(db.Integer,db.ForeignKey('pitch_category.id'))
+    user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
 class LoginForm(FlaskForm):
     email = StringField("Email address", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])

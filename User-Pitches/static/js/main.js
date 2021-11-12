@@ -33,7 +33,8 @@ $(document).ready(function(){
         }).done(function(data){
             alert("Pitch created successfully");
             $('#category').val('')
-            location.reload()
+            getSubCategory()
+            // location.reload()
         });
     });
     //GET SUBCATEGORY
