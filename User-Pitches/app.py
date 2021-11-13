@@ -165,7 +165,14 @@ def pitch_content():
         lst = [{"id":p.id,"title":p.title,"category":p.category_id,"description":p.description,"upvote":p.upvote,"downvote":p.downvote,"created_date":p.created_date} for p in pitches]
         results = jsonify(lst)
         return results
-
+##UPVOTE
+@app.route('/upvote/<int:id>',methods=['GET','POST'])
+def upvote(id):
+    pitch = Pitch.query.get_or_404(id)
+    pitch.upvote += 1
+    db.session.add(pitch)
+    db.session.commit()
+    return {"upvote":pitch.upvote}
 if __name__ == '__main__':
     db.create_all()
     app.run()

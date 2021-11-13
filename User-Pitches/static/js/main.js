@@ -104,9 +104,9 @@ $(document).ready(function(){
                             //READ COMMENTS
                             card += "<i class='fab fa-readme pitch-info-icon'></i> &nbsp;&nbsp;&nbsp;&nbsp;"
                             //UPVOTE
-                            card += "<i class='far fa-thumbs-up pitch-info-icon upvote-btn' style='color:#0000FF'><span class='pitch-info-icon'  data-id='"+data[i].id+"'>"+data[i].upvote+"</span></i> &nbsp;&nbsp;&nbsp;&nbsp;"
+                            card += "<i class='far fa-thumbs-up pitch-info-icon upvote-btn' style='color:#0000FF' data-id='"+data[i].id+"'><span class='pitch-info-icon'  >"+data[i].upvote+"</span></i> &nbsp;&nbsp;&nbsp;&nbsp;"
                             //DOWNVOTE
-                            card += "<i class='far fa-thumbs-down pitch-info-icon style='color:#FF0000''><span class='pitch-info-icon'>"+data[i].downvote+"</span></i> &nbsp;&nbsp;&nbsp;&nbsp;"
+                            card += "<i class='far fa-thumbs-down pitch-info-icon' style='color:#FF0000'><span class='pitch-info-icon'>"+data[i].downvote+"</span></i> &nbsp;&nbsp;&nbsp;&nbsp;"
                             card += "</div>"
                             //CLOSE TAGS
                             card += "<div>"
@@ -132,7 +132,16 @@ $(document).ready(function(){
     }
     //UPVOTE
    $(document).on('click','.upvote-btn',function(){
-       alert('Hello')
+       let id = $(this).data("id");
+       $.ajax({
+        data:{},
+        type:'POST',
+        url:'upvote/'+id,
+        success:function(data){
+            // alert(data.upvote)
+            location.reload()
+        }
+    })
    })
     //LOAD PITCH CATEGORIES
     // $("#category-link").click(function(e){
