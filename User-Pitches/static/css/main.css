@@ -69,7 +69,7 @@
 }
 .user-comment-section{
     display:flex;
-    flex-direction:row;
+    flex-direction:column;
     justify-content:left;
     align-items:top;
     background-color:#F0F8FF;
@@ -78,6 +78,12 @@
     width:50px;
     border-radius:50%;
     margin:0.5em;
+}
+.comment-user-section{
+    width:100%;
+    display:flex;
+    justify-content: right;
+    align-items: flex-end;
 }
 @media only screen and (max-width:600px){
     .login-section{

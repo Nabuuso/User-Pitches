@@ -232,14 +232,20 @@ def comments():
             if user:
                 username = user.full_name
 
-            lst.push({"id":c.id,"description":c.description,"created_date":c.created_date,"pitch":c.pitch_id,"user":c.user_id,"username":user.username})
+            lst.append({"id":c.id,"description":c.description,"created_date":c.created_date,"pitch":c.pitch_id,"user":c.user_id,"username":username})
         results = jsonify(lst)
         return results
 ##GET COMMES
 @app.route('/comments/<int:id>',methods=['GET','POST'])
 def get_comments(id):
     comments = Comment.query.order_by(Comment.created_date.desc()).filter_by(pitch_id=id)
-    lst = [{"id":c.id,"description":c.description,"created_date":c.created_date,"pitch":c.pitch_id,"user":c.user_id} for c in comments]
+    lst = []
+    for c in comments:
+        user = User.query.get_or_404(c.user_id)
+        username = ""
+        if user:
+            username = user.full_name
+        lst.append({"id":c.id,"description":c.description,"created_date":c.created_date,"pitch":c.pitch_id,"user":c.user_id,"username":username})
     results = jsonify(lst)
     return results
 if __name__ == '__main__':

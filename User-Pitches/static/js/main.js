@@ -250,14 +250,16 @@ $(document).ready(function () {
                 cache: false,
                 success: function (data) {
                     for (let i = 0; i < data.length; i++) {
-                        let dv = "<div class='user-comment-section'>";
-                        dv += "<div class='comment-profile'>"
-                        dv += "<i class='fas fa-user-tie user-icon></i>"
-                        dv += "</div>"
-                        dv += "<div class='user-comment'>"
-                        dv += "<small><blockquote>" + data[i].description + "</blockquote></small>"
-                        dv += "</div>"
-                        
+                        let dv = "<div class='user-comment-section'>"
+                            dv += "<div class='comment-profile'>"
+                                dv += "<i class='fas fa-user-tie user-icon></i>"
+                            dv += "</div>"
+                            dv += "<div class='user-comment'>"
+                                dv += "<div><small><blockquote>" + data[i].description + "</blockquote></small></div>"
+                                dv += "<div class='comment-user-section'>"
+                                    dv += "<small>Posted by:<i>"+data[i].username+"</i></small>"
+                                dv += "</div>"
+                            dv += "</div>"
                         dv += "</div><br>"
                         $("#comment-section-" + id).append(dv)
                     }
