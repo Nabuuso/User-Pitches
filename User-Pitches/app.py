@@ -161,8 +161,8 @@ def pitch_content():
         db.session.commit()
         return ('Pitch created successfully')
     elif request.method == 'GET':
-        pitches = Pitch.query.all()
-        lst = [{"id":p.id,"category":p.category_id,"description":p.description,"upvote":p.upvote,"downvote":p.downvote} for p in pitches]
+        pitches = Pitch.query.order_by(Pitch.created_date.desc()).all()
+        lst = [{"id":p.id,"title":p.title,"category":p.category_id,"description":p.description,"upvote":p.upvote,"downvote":p.downvote,"created_date":p.created_date} for p in pitches]
         results = jsonify(lst)
         return results
 

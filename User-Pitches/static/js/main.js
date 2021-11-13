@@ -1,6 +1,8 @@
 $(document).ready(function(){
     //GET PITCH CATEGORY
     getSubCategory();
+    //GET PITCHES
+    getAllPitches();
     //Register user
     $("#registerBtn").click(function(e){
         e.preventDefault();
@@ -80,6 +82,58 @@ $(document).ready(function(){
             }
         })
     })
+    //GET PITCHES
+    function getAllPitches(){
+        $.ajax({
+            url:'pitch-content',
+            method:'GET',
+            cache:false,
+            success:function(data){
+                if(data.length > 0){
+                    for(let i=0; i < data.length;i++){
+                        let card = "<div class='card'>"
+                        card += " <div class='card-body'>"
+                        card += "<h3>"+data[i].title+"</h3>"
+                        card += "<blockquote>"+data[i].description+"</blockquote>"
+                        card += "<div id='comment-display-section'></div>"
+                        card += "<hr>"
+                        // Add comments
+                        card += "<div class='pitch-footer'>"
+                            card += "<div>"
+                            card += "<i class='far fa-comment pitch-info-icon'></i> &nbsp;&nbsp;&nbsp;&nbsp;"
+                            //READ COMMENTS
+                            card += "<i class='fab fa-readme pitch-info-icon'></i> &nbsp;&nbsp;&nbsp;&nbsp;"
+                            //UPVOTE
+                            card += "<i class='far fa-thumbs-up pitch-info-icon upvote-btn' style='color:#0000FF'><span class='pitch-info-icon'  data-id='"+data[i].id+"'>"+data[i].upvote+"</span></i> &nbsp;&nbsp;&nbsp;&nbsp;"
+                            //DOWNVOTE
+                            card += "<i class='far fa-thumbs-down pitch-info-icon style='color:#FF0000''><span class='pitch-info-icon'>"+data[i].downvote+"</span></i> &nbsp;&nbsp;&nbsp;&nbsp;"
+                            card += "</div>"
+                            //CLOSE TAGS
+                            card += "<div>"
+                            card += "<small>Posted on:"+new Date(data[i].created_date)+"</small>"
+                            card +="</div>"
+                        card +="</div>"
+                        card += "<hr>"
+                        card +="</div>"
+                        card +="</div><br/>"
+                        $("#pitch-content-section").append(card)
+                    }
+                }else{
+                    let dv = "<div class='no-content'>"
+                    dv += "<p><i>No data found</i></p>"
+                    dv += "</div>"
+                    $("#pitch-content-section").append(dv)
+                }
+               
+               
+
+            }
+        })
+    }
+    //UPVOTE
+   $(document).on('click','.upvote-btn',function(){
+       alert('Hello')
+   })
     //LOAD PITCH CATEGORIES
     // $("#category-link").click(function(e){
     //     e.preventDefault();

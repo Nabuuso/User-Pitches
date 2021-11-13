@@ -47,6 +47,26 @@
     margin-top:1em;
     min-height:80vh;
 }
+.no-content{
+    width:100%;
+    min-height:400px;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+}
+.pitch-info-icon{
+    font-size:1.1em;
+}
+.pitch-info-icon:hover{
+    font-weight:bolder;
+    font-size:1.2em;
+    cursor:pointer;
+}
+.pitch-footer{
+    display:flex;
+    flex-direction:row;
+    justify-content:space-between;
+}
 @media only screen and (max-width:600px){
     .login-section{
         min-width:100%;
