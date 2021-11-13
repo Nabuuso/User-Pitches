@@ -231,9 +231,8 @@ def comments():
             username = ""
             if user:
                 username = user.full_name
-            else:
-                
-            lst.push({"id":c.id,"description":c.description,"created_date":c.created_date,"pitch":c.pitch_id,"user":c.user_id,"username":user.full_name})
+
+            lst.push({"id":c.id,"description":c.description,"created_date":c.created_date,"pitch":c.pitch_id,"user":c.user_id,"username":user.username})
         results = jsonify(lst)
         return results
 ##GET COMMES
