@@ -30,6 +30,7 @@ class User(db.Model,UserMixin):
     password_hash = db.Column(db.String(200))
     created_date = db.Column(db.DateTime,default=datetime.utcnow)
     pitches = db.relationship('Pitch',backref="user_pitch")
+    comments = db.relationship('Comment',backref="user_comments")
     # def __init__(self,full_name,email,password):
     #     self.full_name = full_name
     #     self.email = email
@@ -59,8 +60,13 @@ class Pitch(db.Model):
     downvote = db.Column(db.Integer)
     category_id = db.Column(db.Integer,db.ForeignKey('pitch_category.id'))
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
+    comments = db.relationship('Comment',backref="pitch_comments")
 class Comment(db.Model):
     id = db.Column(db.Integer,primary_key=True)
+    description = db.Column(db.Text)
+    created_date = db.Column(db.DateTime,default=datetime.utcnow)
+    pitch_id = db.Column(db.Integer,db.ForeignKey('pitch.id'))
+    user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
 class LoginForm(FlaskForm):
     email = StringField("Email address", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
@@ -119,7 +125,7 @@ def users():
 @app.route('/pitch-categories',methods=['POST','GET'])
 def pitch_categories():
     if request.method == 'POST':
-        # categories = PitchCategory.query.
+         # categories = PitchCategory.query.
         category_name = request.form['category_name']
         cat = PitchCategory(category_name=category_name)
         db.session.add(cat)
@@ -183,6 +189,31 @@ def downvote(id):
     db.session.add(pitch)
     db.session.commit()
     return {"downvote":pitch.downvote}
+##COMMENTS
+@app.route('/comments',methods=['POST','GET'])
+def comments():
+    if request.method == 'POST':
+        # categories = PitchCategory.query.
+        description = request.form['description']
+        pitch = request.form['pitch']
+        user = request.form['user']
+        comment = Comment(description=description,pitch_id=pitch,user_id=user)
+        db.session.add(comment)
+        db.session.commit()
+        return redirect(url_for('dashboard'))
+    elif request.method == 'GET':
+        comments = Comment.query.order_by(Comment.created_date.desc()).all()
+        lst = [{"id":c.id,"description":c.description,"created_date":c.created_date,"pitch":c.pitch_id,"user":c.user_id} for c in comments]
+        results = jsonify(lst)
+        return results
+##GET COMMES
+##DOWNVOTE
+@app.route('/comments/<int:id>',methods=['GET','POST'])
+def get_comments(id):
+    comments = Comment.query.order_by(Comment.created_date.desc()).filter_by(pitch_id=id)
+    lst = [{"id":c.id,"description":c.description,"created_date":c.created_date,"pitch":c.pitch_id,"user":c.user_id} for c in comments]
+    results = jsonify(lst)
+    return results
 if __name__ == '__main__':
     db.create_all()
     app.run()

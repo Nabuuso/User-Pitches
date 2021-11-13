@@ -67,6 +67,18 @@
     flex-direction:row;
     justify-content:space-between;
 }
+.user-comment-section{
+    display:flex;
+    flex-direction:row;
+    justify-content:left;
+    align-items:top;
+    background-color:#F0F8FF;
+}
+.user-icon{
+    width:50px;
+    border-radius:50%;
+    margin:0.5em;
+}
 @media only screen and (max-width:600px){
     .login-section{
         min-width:100%;

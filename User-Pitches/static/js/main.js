@@ -62,7 +62,6 @@ $(document).ready(function () {
     }
     //SAVE PITCH
     $("#submit-pitch-btn").click(function (e) {
-        alert("Hello")
         e.preventDefault();
         $.ajax({
             data: {
@@ -92,29 +91,29 @@ $(document).ready(function () {
                 if (data.length > 0) {
                     for (let i = 0; i < data.length; i++) {
                         let card = "<div class='card'>"
-                        card += " <div class='card-body'>"
-                        card += "<h3>" + data[i].title + "</h3>"
-                        card += "<blockquote>" + data[i].description + "</blockquote>"
-                        card += "<div id='comment-display-section'></div>"
-                        card += "<hr>"
-                        // Add comments
-                        card += "<div class='pitch-footer'>"
-                        card += "<div>"
-                        card += "<i class='far fa-comment pitch-info-icon'></i> &nbsp;&nbsp;&nbsp;&nbsp;"
-                        //READ COMMENTS
-                        card += "<i class='fab fa-readme pitch-info-icon'></i> &nbsp;&nbsp;&nbsp;&nbsp;"
-                        //UPVOTE
-                        card += "<i class='far fa-thumbs-up pitch-info-icon upvote-btn' style='color:#0000FF' data-id='" + data[i].id + "'><span class='pitch-info-icon'  >" + data[i].upvote + "</span></i> &nbsp;&nbsp;&nbsp;&nbsp;"
-                        //DOWNVOTE
-                        card += "<i class='far fa-thumbs-down pitch-info-icon downvote-btn' style='color:#FF0000' data-id='" + data[i].id + "'><span class='pitch-info-icon'>" + data[i].downvote + "</span></i> &nbsp;&nbsp;&nbsp;&nbsp;"
-                        card += "</div>"
-                        //CLOSE TAGS
-                        card += "<div>"
-                        card += "<small>Posted on:" + new Date(data[i].created_date) + "</small>"
-                        card += "</div>"
-                        card += "</div>"
-                        card += "<hr>"
-                        card += "</div>"
+                            card += " <div class='card-body'>"
+                                card += "<h3>" + data[i].title + "</h3>"
+                                card += "<blockquote>" + data[i].description + "</blockquote>"
+                                card += "<hr>"
+                                // Add comments
+                                card += "<div class='pitch-footer'>"
+                                card += "<div>"
+                                card += "<i class='far fa-comment pitch-info-icon comment-btn' data-id='" + data[i].id + "'></i> &nbsp;&nbsp;&nbsp;&nbsp;"
+                                //READ COMMENTS
+                                card += "<i class='fab fa-readme pitch-info-icon read-comments-btn' data-id='" + data[i].id + "'></i> &nbsp;&nbsp;&nbsp;&nbsp;"
+                                //UPVOTE
+                                card += "<i class='far fa-thumbs-up pitch-info-icon upvote-btn' style='color:#0000FF' data-id='" + data[i].id + "'><span class='pitch-info-icon'  >" + data[i].upvote + "</span></i> &nbsp;&nbsp;&nbsp;&nbsp;"
+                                //DOWNVOTE
+                                card += "<i class='far fa-thumbs-down pitch-info-icon downvote-btn' style='color:#FF0000' data-id='" + data[i].id + "'><span class='pitch-info-icon'>" + data[i].downvote + "</span></i> &nbsp;&nbsp;&nbsp;&nbsp;"
+                                card += "</div>"
+                                //CLOSE TAGS
+                                card += "<div>"
+                                card += "<small>Posted on:" + new Date(data[i].created_date) + "</small>"
+                                card += "</div>"
+                                card += "</div>"
+                                card += "<hr>"
+                                card += "<div id='comment-section-"+data[i].id+"'></div>"
+                            card += "</div>"
                         card += "</div><br/>"
                         $("#pitch-content-section").append(card)
                     }
@@ -155,6 +154,62 @@ $(document).ready(function () {
             }
         })
     })
+    $(document).on('click', '.comment-btn', function () {
+        let id = $(this).data("id");
+        let dv = "<div>"
+            dv += "<input type='hidden' id='id"+id+"' value='"+id+"'/>"
+            dv += "<div class='mb-3'>"
+                dv += "<label for='comment' class='form-label'>Comment</label>"
+                dv += "<textarea class='form-control' id='comment"+id+"' rows='5'></textarea>"
+            dv += "</div>"
+            dv += "<button class='btn btn-primary submit-comment' id='submit-comment-"+id+"' data-id='"+id+"'>Submit comment</button>"
+        dv += "</div>"
+        $("#comment-section-"+id).html(dv)
+    })
+    //SUBMIT COMMENT
+    $(document).on('click','.submit-comment',function(e){
+        e.preventDefault()
+        let id = $(this).data("id")
+        $.ajax({
+            data: {
+                description: $('#comment'+id).val(),
+                pitch: id,
+                user: 6
+            },
+            type: 'POST',
+            url: 'comments',
+            success: function () {
+                alert("Comment created successfully!")
+                $('#comment'+id).val('')
+                location.reload()
+            }
+        })
+    })
+    //READ COMMENTS
+    $(document).on('click','.read-comments-btn',function(e){
+        e.preventDefault()
+        let id = $(this).data("id")
+        $.ajax({
+            url: 'comments/'+id,
+            method: 'GET',
+            cache: false,
+            success: function (data) {
+                for (let i = 0; i < data.length; i++) {
+                    let dv = "<div class='user-comment-section'>";
+                        dv += "<div class='comment-profile'>"
+                            dv += "<img class='user-icon' src='{{ \'static\',filename='user.png'}}' title='U'/>"
+                        dv += "</div>"
+                        dv += "<div class='user-comment'>"
+                            dv += "<small><blockquote>"+data[i].description+"</blockquote></small>"
+                        dv += "</div>"
+                        
+                    dv += "</div><br>"
+                    $("#comment-section-"+id).append(dv)
+                }
+            }
+        })
+    })
+
     //DOWNVOTE
 
     //LOAD PITCH CATEGORIES
