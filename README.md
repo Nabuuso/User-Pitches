@@ -20,10 +20,12 @@ As a user I would like:
 * A user can also create categories and post pitches within the application
 
 ## Technologies Used
-Python3.6
-Flask framework
-Bootstrap
-PostgreSQL
+* Python3.6
+* Flask
+* Bootstrap
+* PostgreSQL
+* Html
+* Javascript
 ## Setup/Installation Requirements
 * Internet access
 * git clone https://github.com/Nabuuso/User-Pitches.git
