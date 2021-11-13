@@ -16,15 +16,23 @@
                     <a class="nav-link" href="{{ url_for('categories')}}">Categories</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="">Pitches</a>
+                    <a class="nav-link" href="{{ url_for('pitches')}}" id="">My Pitches</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('index')}}">Login</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{{ url_for('register')}}">Register</a>
+                </li> -->
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('logout')}}">Logout</a>
                 </li>
             </ul>
+            <!-- <ul class="d-flex">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ url_for('register')}}">Register</a>
+                </li>
+            </ul> -->
         </div>
     </div>
 </nav>

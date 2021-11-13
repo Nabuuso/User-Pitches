@@ -22,7 +22,6 @@ $(document).ready(function(){
     });
     //SUBMIT CATEGORY
     $("#submitCategory").click(function(e){
-        getSubCategory()
         e.preventDefault();
         $.ajax({
             data:{
@@ -33,8 +32,8 @@ $(document).ready(function(){
         }).done(function(data){
             alert("Pitch created successfully");
             $('#category').val('')
-            getSubCategory()
-            // location.reload()
+            // getSubCategory()
+            location.reload()
         });
     });
     //GET SUBCATEGORY
@@ -50,15 +49,40 @@ $(document).ready(function(){
                     tbl += "<td>"+data[i].created_date+"</td>"
                     tbl += "</tr>"
                     $("#table-category").append(tbl)
+
+                    $("#categories-list").append("<a href='#' class='list-group-item list-group-item-action'>"+data[i].name+"</a>")
+                    $("#category-combobox").append("<option value="+data[i].id+">"+data[i].name+"</option>")
                 }
                
 
             }
         })
     }
-    //LOAD PITCH CATEGORIES
-    $("#category-link").click(function(e){
+    //SAVE PITCH
+    $("#submit-pitch-btn").click(function(e){
+        alert("Hello")
         e.preventDefault();
-        $("#dashboard-container").load("categories")
+        $.ajax({
+            data:{
+                title : $('#title').val(),
+                description:$('#pitch-description').val(),
+                category:$('#category-combobox').val(),
+                user:6
+            },
+            type:'POST',
+            url:'pitch-content',
+            success:function(){
+                alert("Pitch created successfully!")
+                $('#title').val('')
+                $('#pitch-description').val(''),
+                $('#category-combobox').val('')
+                location.reload()
+            }
+        })
     })
+    //LOAD PITCH CATEGORIES
+    // $("#category-link").click(function(e){
+    //     e.preventDefault();
+    //     $("#dashboard-container").load("categories")
+    // })
 })

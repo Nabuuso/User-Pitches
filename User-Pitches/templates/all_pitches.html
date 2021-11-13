@@ -3,12 +3,14 @@
 <div class="container-fluid" id="dashboard-container">
     <div class="row">
         <div class="col-sm-8">
-
+            {{ current_user.email }}
         </div>
         <div class="col-sm-4 side-bar-category">
             <div class="side-categories">
                 <h3><b>Categories</b></h3>
-                
+                <ul class="list-group" id="categories-list">
+
+                </ul>
             </div>
         </div>
     </div>

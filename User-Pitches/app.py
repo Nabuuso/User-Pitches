@@ -29,7 +29,7 @@ class User(db.Model,UserMixin):
     email = db.Column(db.String(200),nullable=False,unique=True)
     password_hash = db.Column(db.String(200))
     created_date = db.Column(db.DateTime,default=datetime.utcnow)
-    pitches = db.relationship('Pitch',backref="pitch")
+    pitches = db.relationship('Pitch',backref="user_pitch")
     # def __init__(self,full_name,email,password):
     #     self.full_name = full_name
     #     self.email = email
@@ -49,7 +49,7 @@ class PitchCategory(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     category_name = db.Column(db.String(200),nullable=False)
     created_date = db.Column(db.DateTime,default=datetime.utcnow)
-    pitches = db.relationship('Pitch',backref="pitch")
+    pitches = db.relationship('Pitch',backref="cat_pitch")
 class Pitch(db.Model):
     id = db.Column(db.Integer,primary_key=True)
     title = db.Column(db.String(200),nullable=False)
@@ -124,7 +124,7 @@ def pitch_categories():
         db.session.commit()
         return redirect(url_for('dashboard'))
     elif request.method == 'GET':
-        categories = PitchCategory.query.all()
+        categories = PitchCategory.query.order_by(PitchCategory.created_date.desc()).all()
         lst = [{"id":cat.id,"name":cat.category_name,"created_date":cat.created_date} for cat in categories]
         results = jsonify(lst)
         return results
@@ -140,6 +140,31 @@ def dashboard():
 @app.route('/categories')
 def categories():
     return render_template('categories.html')
+
+##Load my pitches
+@app.route('/pitches')
+def pitches():
+    return render_template('/pitches.html')
+##PITCH POSTS
+@app.route('/pitch-content',methods=['POST','GET'])
+def pitch_content():
+    if request.method == 'POST':
+        # categories = PitchCategory.query.
+        title = request.form['title']
+        description = request.form['description']
+        upvote=0
+        downvote=0
+        category_id = request.form['category']
+        user_id = request.form['user']
+        pitch = Pitch(title=title,description=description,upvote=upvote,downvote=downvote,category_id=category_id,user_id=user_id)
+        db.session.add(pitch)
+        db.session.commit()
+        return ('Pitch created successfully')
+    elif request.method == 'GET':
+        pitches = Pitch.query.all()
+        lst = [{"id":p.id,"category":p.category_id,"description":p.description,"upvote":p.upvote,"downvote":p.downvote} for p in pitches]
+        results = jsonify(lst)
+        return results
 
 if __name__ == '__main__':
     db.create_all()
