@@ -22,7 +22,7 @@ login_manager.login_view = 'index'
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
+##User model
 class User(db.Model,UserMixin):
     id = db.Column(db.Integer,primary_key=True)
     full_name = db.Column(db.String(200),nullable=False)
@@ -59,6 +59,8 @@ class Pitch(db.Model):
     downvote = db.Column(db.Integer)
     category_id = db.Column(db.Integer,db.ForeignKey('pitch_category.id'))
     user_id = db.Column(db.Integer,db.ForeignKey('user.id'))
+class Comment(db.Model):
+    id = db.Column(db.Integer,primary_key=True)
 class LoginForm(FlaskForm):
     email = StringField("Email address", validators=[DataRequired()])
     password = PasswordField("Password", validators=[DataRequired()])
@@ -173,6 +175,14 @@ def upvote(id):
     db.session.add(pitch)
     db.session.commit()
     return {"upvote":pitch.upvote}
+##DOWNVOTE
+@app.route('/downvote/<int:id>',methods=['GET','POST'])
+def downvote(id):
+    pitch = Pitch.query.get_or_404(id)
+    pitch.downvote += 1
+    db.session.add(pitch)
+    db.session.commit()
+    return {"downvote":pitch.downvote}
 if __name__ == '__main__':
     db.create_all()
     app.run()
