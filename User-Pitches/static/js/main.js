@@ -252,12 +252,12 @@ $(document).ready(function () {
                     for (let i = 0; i < data.length; i++) {
                         let dv = "<div class='user-comment-section'>";
                         dv += "<div class='comment-profile'>"
-                        dv += "<img class='user-icon' src='{{ \'static\',filename='user.png'}}' title='U'/>"
+                        dv += "<i class='fas fa-user-tie user-icon></i>"
                         dv += "</div>"
                         dv += "<div class='user-comment'>"
                         dv += "<small><blockquote>" + data[i].description + "</blockquote></small>"
                         dv += "</div>"
-
+                        
                         dv += "</div><br>"
                         $("#comment-section-" + id).append(dv)
                     }
