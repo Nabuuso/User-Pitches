@@ -52,7 +52,7 @@ $(document).ready(function () {
                     tbl += "</tr>"
                     $("#table-category").append(tbl)
 
-                    $("#categories-list").append("<a href='#' class='list-group-item list-group-item-action'>" + data[i].name + "</a>")
+                    $("#categories-list").append("<a href='#' class='list-group-item list-group-item-action pitch-category-item' data-id='"+data[i].id+"' data-name='"+data[i].name+"'>" + data[i].name + "</a>")
                     $("#category-combobox").append("<option value=" + data[i].id + ">" + data[i].name + "</option>")
                 }
 
@@ -60,6 +60,59 @@ $(document).ready(function () {
             }
         })
     }
+    //POPULATE PITCHES SECTION
+    function populatePitches(data,action){
+        $("#pitch-content-section").html("")
+        if (data.length > 0) {
+            for (let i = 0; i < data.length; i++) {
+                let card = "<div class='card'>"
+                    card += " <div class='card-body'>"
+                        card += "<h3>" + data[i].title + "</h3>"
+                        card += "<blockquote>" + data[i].description + "</blockquote>"
+                        card += "<hr>"
+                        // Add comments
+                        card += "<div class='pitch-footer'>"
+                        card += "<div>"
+                        card += "<i class='far fa-comment pitch-info-icon comment-btn' data-id='" + data[i].id + "'></i> &nbsp;&nbsp;&nbsp;&nbsp;"
+                        //READ COMMENTS
+                        card += "<i class='fab fa-readme pitch-info-icon read-comments-btn' data-id='" + data[i].id + "'></i> &nbsp;&nbsp;&nbsp;&nbsp;"
+                        //UPVOTE
+                        card += "<i class='far fa-thumbs-up pitch-info-icon upvote-btn' style='color:#0000FF' data-id='" + data[i].id + "'><span class='pitch-info-icon'  >" + data[i].upvote + "</span></i> &nbsp;&nbsp;&nbsp;&nbsp;"
+                        //DOWNVOTE
+                        card += "<i class='far fa-thumbs-down pitch-info-icon downvote-btn' style='color:#FF0000' data-id='" + data[i].id + "'><span class='pitch-info-icon'>" + data[i].downvote + "</span></i> &nbsp;&nbsp;&nbsp;&nbsp;"
+                        card += "</div>"
+                        //CLOSE TAGS
+                        card += "<div>"
+                        card += "<small>Posted on:" + new Date(data[i].created_date) + "</small>"
+                        card += "</div>"
+                        card += "</div>"
+                        card += "<hr>"
+                        card += "<div id='comment-section-"+data[i].id+"'></div>"
+                    card += "</div>"
+                card += "</div><br/>"
+                $("#pitch-content-section").append(card)
+            }
+        } else {
+            let dv = "<div class='no-content'>"
+            dv += "<p><i>No data found</i></p>"
+            dv += "</div>"
+            $("#pitch-content-section").append(dv)
+        }
+    }
+    //FILTER PITCH
+    $(document).on('click','.pitch-category-item',function(){
+        let id = $(this).data("id")
+        let name = $(this).data("name")
+        $("#pitch-title").text(name)
+        $.ajax({
+            url: 'pitch-content/'+id,
+            method: 'GET',
+            cache: false,
+            success: function (data) {
+               populatePitches(data,'filter')
+            }
+        })
+    })
     //SAVE PITCH
     $("#submit-pitch-btn").click(function (e) {
         e.preventDefault();
@@ -87,45 +140,8 @@ $(document).ready(function () {
             url: 'pitch-content',
             method: 'GET',
             cache: false,
-            success: function (data) {
-                if (data.length > 0) {
-                    for (let i = 0; i < data.length; i++) {
-                        let card = "<div class='card'>"
-                            card += " <div class='card-body'>"
-                                card += "<h3>" + data[i].title + "</h3>"
-                                card += "<blockquote>" + data[i].description + "</blockquote>"
-                                card += "<hr>"
-                                // Add comments
-                                card += "<div class='pitch-footer'>"
-                                card += "<div>"
-                                card += "<i class='far fa-comment pitch-info-icon comment-btn' data-id='" + data[i].id + "'></i> &nbsp;&nbsp;&nbsp;&nbsp;"
-                                //READ COMMENTS
-                                card += "<i class='fab fa-readme pitch-info-icon read-comments-btn' data-id='" + data[i].id + "'></i> &nbsp;&nbsp;&nbsp;&nbsp;"
-                                //UPVOTE
-                                card += "<i class='far fa-thumbs-up pitch-info-icon upvote-btn' style='color:#0000FF' data-id='" + data[i].id + "'><span class='pitch-info-icon'  >" + data[i].upvote + "</span></i> &nbsp;&nbsp;&nbsp;&nbsp;"
-                                //DOWNVOTE
-                                card += "<i class='far fa-thumbs-down pitch-info-icon downvote-btn' style='color:#FF0000' data-id='" + data[i].id + "'><span class='pitch-info-icon'>" + data[i].downvote + "</span></i> &nbsp;&nbsp;&nbsp;&nbsp;"
-                                card += "</div>"
-                                //CLOSE TAGS
-                                card += "<div>"
-                                card += "<small>Posted on:" + new Date(data[i].created_date) + "</small>"
-                                card += "</div>"
-                                card += "</div>"
-                                card += "<hr>"
-                                card += "<div id='comment-section-"+data[i].id+"'></div>"
-                            card += "</div>"
-                        card += "</div><br/>"
-                        $("#pitch-content-section").append(card)
-                    }
-                } else {
-                    let dv = "<div class='no-content'>"
-                    dv += "<p><i>No data found</i></p>"
-                    dv += "</div>"
-                    $("#pitch-content-section").append(dv)
-                }
-
-
-
+            success: function (data,) {
+               populatePitches(data,'all')
             }
         })
     }

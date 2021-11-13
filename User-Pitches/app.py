@@ -173,6 +173,13 @@ def pitch_content():
         lst = [{"id":p.id,"title":p.title,"category":p.category_id,"description":p.description,"upvote":p.upvote,"downvote":p.downvote,"created_date":p.created_date} for p in pitches]
         results = jsonify(lst)
         return results
+##FILTER PITCHES
+@app.route('/pitch-content/<int:id>',methods=['GET','POST'])
+def get_pitches(id):
+    pitches = Pitch.query.order_by(Pitch.created_date.desc()).filter_by(category_id=id)
+    lst = [{"id":p.id,"title":p.title,"category":p.category_id,"description":p.description,"upvote":p.upvote,"downvote":p.downvote,"created_date":p.created_date} for p in pitches]
+    results = jsonify(lst)
+    return results
 ##UPVOTE
 @app.route('/upvote/<int:id>',methods=['GET','POST'])
 def upvote(id):
@@ -207,7 +214,6 @@ def comments():
         results = jsonify(lst)
         return results
 ##GET COMMES
-##DOWNVOTE
 @app.route('/comments/<int:id>',methods=['GET','POST'])
 def get_comments(id):
     comments = Comment.query.order_by(Comment.created_date.desc()).filter_by(pitch_id=id)
