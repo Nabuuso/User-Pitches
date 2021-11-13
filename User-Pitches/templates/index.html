@@ -18,7 +18,7 @@
                         {{ form.password.label(class="form-label") }}
                         {{ form.password(class="form-control")}}
                         <br>
-                        <!-- {{ form.submit(class="btn btn-primary form-control") }} -->
+                        {{ form.submit(class="btn btn-primary form-control") }}
                         <!-- <div>
                         <label for="exampleFormControlInput1" class="form-label">Email address</label>
                         <div class="input-group mb-3">
@@ -35,9 +35,10 @@
                                 aria-describedby="basic-addon1">
                         </div>
                         </div>-->
-                        <a href="{{ url_for('dashboard')}}"><button type="button" class="btn btn-primary form-control">Login</button></a>
+                        <!-- <a href="{{ url_for('dashboard')}}"><button type="button" class="btn btn-primary form-control">Login</button></a> -->
                         <br><br>
                         <p class="signup-txt">Don't have an account? <a href="{{ url_for('register')}}">Sign up</a></p>
+                        <p class="signup-txt"><a href="{{ url_for('dashboard')}}">Home</a></p>
                     </form>
                 </div>
             </div>

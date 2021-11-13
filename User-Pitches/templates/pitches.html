@@ -5,7 +5,11 @@
         <div class="col">
             <div class="category-title">
                 <h3>My Pitches</h3>
+                {% if current_user.is_authenticated %}
                 <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#pitchModal">Add pitch</button>
+                {% endif %}
+            </div>
+            <div id="client-pitch-section">
             </div>
         </div>
     </div>

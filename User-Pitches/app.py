@@ -74,20 +74,28 @@ class LoginForm(FlaskForm):
 ###INDEX & LOGIN PAGE
 @app.route('/index',methods=['GET','POST'])
 def index():
-    form = LoginForm('/index')
+    form = LoginForm()
     if(request.method == 'POST'):
-        print('login')
         if form.validate_on_submit():
-            user = User.query.filter_by(email = form.email.data).first()
+            user = User.query.filter_by(email=form.email.data).first()
             if user:
-                if check_password_hash(user.password_hash,form.password.data):
+                try:
+                    print(user.password_hash)
+                    print(form.password.data)
                     login_user(user)
-                    # flash("Login successfully")
-                    print('success')
-                    # return jsonify({'name':user.full_name,'email':user.email})
                     return redirect(url_for('dashboard'))
-                else:
-                    flash("Wrong password - Try again")
+                    # if check_password_hash(user.password_hash,form.password.data):
+                    #     print(user.password_hash)
+                    #     login_user(user)
+                    #     # flash("Login successfully")
+                    #     print(user)
+                    #     print('success')
+                    #     # return jsonify({'name':user.full_name,'email':user.email})
+                    #     return redirect(url_for('dashboard'))
+                    # else:
+                    #     flash("Wrong password - Try again")
+                except Exception as e:
+                    raise(e)
             else:
                 flash("That user does not exist, try again!")
     # return jsonify({'name':'Muuyi','email':'Andrew'})
@@ -98,8 +106,8 @@ def index():
 @login_required
 def logout():
     logout_user()
-    flash("You have successfully logged out!")
-    return redirect(url_for('login'))
+    # flash("You have successfully logged out!")
+    return redirect(url_for('dashboard'))
 @app.errorhandler(404)
 def page_not_found(e):
     return render_template("404.html"),404
@@ -180,6 +188,13 @@ def get_pitches(id):
     lst = [{"id":p.id,"title":p.title,"category":p.category_id,"description":p.description,"upvote":p.upvote,"downvote":p.downvote,"created_date":p.created_date} for p in pitches]
     results = jsonify(lst)
     return results
+##CLIENT PITCHES
+@app.route('/client-pitch/<int:id>',methods=['GET','POST'])
+def get_client_pitches(id):
+    pitches = Pitch.query.order_by(Pitch.created_date.desc()).filter_by(user_id=id)
+    lst = [{"id":p.id,"title":p.title,"category":p.category_id,"description":p.description,"upvote":p.upvote,"downvote":p.downvote,"created_date":p.created_date} for p in pitches]
+    results = jsonify(lst)
+    return results
 ##UPVOTE
 @app.route('/upvote/<int:id>',methods=['GET','POST'])
 def upvote(id):
@@ -210,7 +225,15 @@ def comments():
         return redirect(url_for('dashboard'))
     elif request.method == 'GET':
         comments = Comment.query.order_by(Comment.created_date.desc()).all()
-        lst = [{"id":c.id,"description":c.description,"created_date":c.created_date,"pitch":c.pitch_id,"user":c.user_id} for c in comments]
+        lst = []
+        for c in comments:
+            user = User.query.get_or_404(c.user_id)
+            username = ""
+            if user:
+                username = user.full_name
+            else:
+                
+            lst.push({"id":c.id,"description":c.description,"created_date":c.created_date,"pitch":c.pitch_id,"user":c.user_id,"username":user.full_name})
         results = jsonify(lst)
         return results
 ##GET COMMES

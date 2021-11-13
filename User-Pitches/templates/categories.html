@@ -5,8 +5,10 @@
         <div class="col">
             <div class="category-title">
                 <h3>Pitches Categories</h3>
+                {% if current_user.is_authenticated %}
                 <button class="btn btn-link" data-bs-toggle="modal" data-bs-target="#categoriesModal">Add
                     category</button>
+                {% endif %}
             </div>
             <div class="table-responsive">
                 <table class="table table-striped" id="table-category">
@@ -25,7 +27,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Pitch category</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form>
